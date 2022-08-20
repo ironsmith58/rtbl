@@ -141,37 +141,37 @@ func Parse(path string) (*Table, error){
             if line[0] == '<'{
                 // is it a prefix?
                 group.Prefix = line[1:]
-            } else if line[0] == '>'{
+            }else if line[0] == '>'{
                 // is it a suffix?
                 group.Suffix = line[1:]
-            } else if line[0] == '_'{
+            }else if line[0] == '_'{
                 // is it continuation
-            } else{
+            }else{
                 min, max, text, err := parseColonItem(line)
                 if err != nil{
                     return nil, fmt.Errorf(errorFmt, err, lineno)
-                } else{
+                }else{
                     group.AddItem(min, max, text)
                 }
             }
-        } else if state == SEMI_GROUP{
+        }else if state == SEMI_GROUP{
             if line[0] == '<'{
                 // is it a prefix?
                 group.Prefix = line[1:]
-            } else if line[0] == '>'{
+            }else if line[0] == '>'{
                 // is it a suffix?
                 group.Suffix = line[1:]
-            } else if line[0] == '_'{
+            }else if line[0] == '_'{
                 // is it continuation
-            } else{
+            }else{
                 num, text, err := parseSemiItem(line)
                 if err != nil{
                     return nil, fmt.Errorf(errorFmt, err, lineno)
-                } else{
+                }else{
                     group.AddItem(num, 0, text)
                 }
             }
-        } else if line[0] == ':'{
+        }else if line[0] == ':'{
             state = COLON_GROUP
             // Save any previous group
             if group != nil{
@@ -179,7 +179,7 @@ func Parse(path string) (*Table, error){
             }
             group = &Group{}
             group.Name = line[1:]
-        } else if line[0] == ';'{
+        }else if line[0] == ';'{
             state = SEMI_GROUP
             // Save any previous group
             if group != nil{
@@ -187,7 +187,7 @@ func Parse(path string) (*Table, error){
             }
             group = &Group{}
             group.Name = line[1:]
-        } else if line[0] == '%'{
+        }else if line[0] == '%'{
             // Variable Format: %VariableName%,x
             name, value, err := parseVariableDeclaration(line)
             if err != nil{
@@ -200,7 +200,7 @@ func Parse(path string) (*Table, error){
                 err = fmt.Errorf(errorFmt, err, lineno)
                 return nil, err
             }
-        } else if line[0] == '|'{
+        }else if line[0] == '|'{
             // Variable Format: |VariableName?x|
             // ? is the opcode, [+-*/\><&=]
 
