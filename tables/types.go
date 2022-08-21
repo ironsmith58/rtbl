@@ -42,10 +42,6 @@ func (t *Table) AddGroup(g *Group) error {
 	}
 	name := g.Name
 
-	if g.ID == "" {
-		g.ID = g.Name
-	}
-
 	_, exists := t.Groups[name]
 	if exists {
 		return fmt.Errorf("Group already exists; %s", name)
@@ -57,10 +53,10 @@ func (t *Table) AddGroup(g *Group) error {
 }
 
 type Group struct {
-	TableName  string
-	Prefix     string
-	Suffix     string
-	roll.Table `json:"-"` // FIXME: hack to allow --export to json to work for now
+	TableName string
+	Prefix    string
+	Suffix    string
+	roll.List `json:"-"` // FIXME: hack to allow --export to json to work for now
 }
 
 func makeFaces(n int) roll.Faces {
@@ -76,18 +72,10 @@ func (g *Group) Close() {
 	if g == nil {
 		return
 	}
-	last := len(g.Items) - 1
-	item := g.Items[last]
-	var d int
-	if item.Match[0] > item.Match[1] {
-		d = item.Match[0]
-	} else {
-		d = item.Match[1]
-	}
-	g.Dice = roll.Dice{1, roll.NewDie(makeFaces(d))}
 }
 
 func (g *Group) AddItem(min, max int, l string) {
-	g.Items = append(g.Items,
-		roll.TableItem{Match: []int{min, max}, Text: l})
+	for j := min; j <= max; j++ {
+		g.Items = append(g.Items, l)
+	}
 }

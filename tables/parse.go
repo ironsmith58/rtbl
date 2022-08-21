@@ -184,7 +184,7 @@ func Parse(path string) (*Table, error) {
 				if err != nil {
 					return nil, fmt.Errorf(errorFmt, err, lineno)
 				} else {
-					group.AddItem(num, 0, text)
+					group.AddItem(1, num, text)
 				}
 			}
 		} else if line[0] == ':' {
