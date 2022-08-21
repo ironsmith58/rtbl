@@ -6,6 +6,8 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"rtbl/tables"
 
 	"github.com/spf13/cobra"
 )
@@ -13,15 +15,32 @@ import (
 // newCmd represents the new command
 var newCmd = &cobra.Command{
 	Use:   "new",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "generate a new result from a table",
+	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("new called", args)
+
+		env_root := os.Getenv("RTBL_TABLE_ROOT")
+		root, err := cmd.Flags().GetString("root")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		if len(root) == 0 {
+			root = env_root
+		}
+
+		tablenames := args
+
+		for _, tn := range tablenames {
+			path := root + "/" + tn + ".tab"
+			parsedTable, err := tables.Parse(path)
+			if err != nil {
+				fmt.Println(path, ":", err)
+				return
+			}
+			r := parsedTable.Roll("Start")
+			fmt.Println(r)
+		}
 	},
 }
 

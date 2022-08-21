@@ -2,6 +2,7 @@ package tables
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/nboughton/go-roll"
 )
@@ -40,7 +41,11 @@ func (t *Table) AddGroup(g *Group) error {
 		t.Groups = make(map[string]*Group)
 	}
 	name := g.Name
-	fmt.Println("AddGroup", name)
+
+	if g.ID == "" {
+		g.ID = g.Name
+	}
+
 	_, exists := t.Groups[name]
 	if exists {
 		return fmt.Errorf("Group already exists; %s", name)
@@ -58,10 +63,28 @@ type Group struct {
 	roll.Table `json:"-"` // FIXME: hack to allow --export to json to work for now
 }
 
+func makeFaces(n int) roll.Faces {
+	var f roll.Faces
+
+	for j := 1; j <= n; j++ {
+		f = append(f, roll.Face{N: j, Value: strconv.Itoa(j)})
+	}
+	return f
+}
+
 func (g *Group) Close() {
 	if g == nil {
 		return
 	}
+	last := len(g.Items) - 1
+	item := g.Items[last]
+	var d int
+	if item.Match[0] > item.Match[1] {
+		d = item.Match[0]
+	} else {
+		d = item.Match[1]
+	}
+	g.Dice = roll.Dice{1, roll.NewDie(makeFaces(d))}
 }
 
 func (g *Group) AddItem(min, max int, l string) {

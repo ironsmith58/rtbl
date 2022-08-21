@@ -54,12 +54,13 @@ var parseCmd = &cobra.Command{
 						// For now ignoring error
 						// but you should handle
 						// the error in above function
-						jsonF, err := json.MarshalIndent(parsedTable, "", "  ")
+						_, err := json.MarshalIndent(parsedTable, "", "  ")
 						if err != nil {
 							fmt.Println("Internal Error:", err)
 						}
 						// typecasting byte array to string
-						fmt.Println(string(jsonF))
+						//fmt.Println(string(jsonF))
+						fmt.Println(parsedTable)
 					}
 				}
 			}
@@ -75,13 +76,14 @@ var parseCmd = &cobra.Command{
 				// For now ignoring error
 				// but you should handle
 				// the error in above function
-				jsonF, err := json.MarshalIndent(parsedTable, "", "  ")
+				_, err := json.MarshalIndent(parsedTable, "", "  ")
 				if err != nil {
 					fmt.Println("Internal Error:", err)
 				}
 
 				// typecasting byte array to string
-				fmt.Println(string(jsonF))
+				//fmt.Println(string(jsonF))
+				fmt.Println(parsedTable)
 			}
 		}
 	},
