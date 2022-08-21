@@ -25,56 +25,69 @@ func parseColonItem(line string) (int, int, string, error) {
 	var err error
 	var min int64
 	var max int64
-	text := ""
 
-	line = strings.TrimLeft(line, " ")
-	words := strings.FieldsFunc(line, func(c rune) bool {
-		if c == ',' || c == ' ' || c == '\t' {
-			return true
+	var fields []string
+	var irest int
+
+	fields = strings.Split(line, ",")
+	if len(fields) < 2 {
+		fields = strings.Split(line, "\t")
+		if len(fields) != 2 {
+			return int(0), int(0), "",
+				fmt.Errorf("Colon Group: no delimiter between range and text; %s", line)
 		}
-		return false
-	})
-	if len(words) != 2 {
-		return 0, 0, "",
-			fmt.Errorf("Colon Group: missing delimiter between range and text '%s'", line)
 	}
-	rndmm := strings.Split(words[0], "-")
-	min, err = strconv.ParseInt(rndmm[0], 10, 0)
-	if err != nil {
-		return 0, 0, "", err
-	}
-	// Random range is optional
-	// there might not be a 'max'
-	if len(rndmm) == 2 {
-		max, err = strconv.ParseInt(rndmm[1], 10, 0)
+	// fields[0] is the number range and needs to be parsed
+	//   is there a dash??
+	nums := strings.Split(fields[0], "-")
+	irest = len(fields[0]) + 1
+	if len(nums) == 1 {
+		// single number, not a range
+		min, err = strconv.ParseInt(nums[0], 10, 0)
 		if err != nil {
-			return 0, 0, "", err
+			return int(0), int(0), "",
+				fmt.Errorf("Colon Group: probablity is not a number; %s", line)
+		}
+	} else if len(nums) == 2 {
+		// probability range
+		min, err = strconv.ParseInt(nums[0], 10, 0)
+		if err != nil {
+			return int(0), int(0), "",
+				fmt.Errorf("Colon Group: min probablity is not a number; %s", line)
+		}
+		max, err = strconv.ParseInt(nums[0], 10, 0)
+		if err != nil {
+			return int(0), int(0), "",
+				fmt.Errorf("Colon Group: max probablity is not a number; %s", line)
 		}
 	}
-	return int(min), int(max), text, nil
+	if max != 0 && max < min {
+		return int(0), int(0), "",
+			fmt.Errorf("Colon Group: max of probability range is less than min; %s", line)
+	}
+	// fields[1] is the text
+
+	return int(min), int(max), line[irest:], nil
 }
 
 func parseSemiItem(line string) (int, string, error) {
 	var err error
-	var num int64
-	text := ""
+	var min int64
 
-	line = strings.TrimLeft(line, " ")
-	words := strings.FieldsFunc(line, func(c rune) bool {
-		if c == ',' || c == ' ' || c == '\t' {
-			return true
+	fields := strings.Split(line, ",")
+	if len(fields) != 2 {
+		fields = strings.Split(line, "\t")
+		if len(fields) != 2 {
+			return int(0), "",
+				fmt.Errorf("Colon Group: no delimter between range and text; %s", line)
 		}
-		return false
-	})
-	if len(words) == 1 {
-		return 0, "",
-			fmt.Errorf("Semi Group: missing delimiter between range and text '%s'", line)
 	}
-	num, err = strconv.ParseInt(words[0], 10, 0)
+	min, err = strconv.ParseInt(fields[0], 10, 0)
 	if err != nil {
-		return 0, "", err
+		return int(0), "",
+			fmt.Errorf("Colon Group: probablity is not a number; %s", line)
 	}
-	return int(num), text, nil
+	return int(min), fields[1], nil
 }
 
 func parseVariableDeclaration(line string) (string, string, error) {
@@ -115,6 +128,7 @@ func Parse(path string) (*Table, error) {
 	}
 	name := makeName(path, "")
 	table := NewTable(name)
+	table.Size = len(content)
 	table.Path = path
 	var group *Group
 	var state int
@@ -126,13 +140,15 @@ func Parse(path string) (*Table, error) {
 			line = line[:idx]
 		}
 		// trim the line
-		line = strings.TrimRight(line, " \t\r\n")
+		line = strings.TrimRight(line, "\r\n")
+		line = strings.TrimLeft(line, " ")
 		// if there is nothing to parse go to next line
 		// blank line also closes any previous group parsing
 		if len(line) == 0 {
 			state = NO_GROUP
 			if group != nil {
 				table.AddGroup(group)
+				group = nil
 			}
 			continue
 		}
@@ -176,6 +192,7 @@ func Parse(path string) (*Table, error) {
 			// Save any previous group
 			if group != nil {
 				table.AddGroup(group)
+				group = nil
 			}
 			group = &Group{}
 			group.Name = line[1:]
@@ -184,6 +201,7 @@ func Parse(path string) (*Table, error) {
 			// Save any previous group
 			if group != nil {
 				table.AddGroup(group)
+				group = nil
 			}
 			group = &Group{}
 			group.Name = line[1:]
@@ -221,6 +239,7 @@ func Parse(path string) (*Table, error) {
 	}
 	if group != nil {
 		table.AddGroup(group)
+		group = nil
 	}
 	return table, nil
 }
