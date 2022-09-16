@@ -26,17 +26,17 @@ func parseColonItem(line string) (int, int, string, error) {
 	var min int64
 	var max int64
 
-	var fields []string
 	var irest int
 
-	fields = strings.Split(line, ",")
-	if len(fields) < 2 {
-		fields = strings.Split(line, "\t")
-		if len(fields) != 2 {
+	idx := strings.Index(line, ",")
+	if idx == -1 { // comma not found, lets check for a tab
+		idx = strings.Index(line, "\t")
+		if idx == -1 {
 			return int(0), int(0), "",
 				fmt.Errorf("Colon Group: no delimiter between range and text; %s", line)
 		}
 	}
+	fields := []string{line[:idx], line[idx+1:]}
 	// fields[0] is the number range and needs to be parsed
 	//   is there a dash??
 	nums := strings.Split(fields[0], "-")
@@ -46,19 +46,19 @@ func parseColonItem(line string) (int, int, string, error) {
 		min, err = strconv.ParseInt(nums[0], 10, 0)
 		if err != nil {
 			return int(0), int(0), "",
-				fmt.Errorf("Colon Group: probablity is not a number; %s", line)
+				fmt.Errorf("Colon Group: single probability is not a number; %s", line)
 		}
 	} else if len(nums) == 2 {
 		// probability range
 		min, err = strconv.ParseInt(nums[0], 10, 0)
 		if err != nil {
 			return int(0), int(0), "",
-				fmt.Errorf("Colon Group: min probablity is not a number; %s", line)
+				fmt.Errorf("Colon Group: min probability of range is not a number; %s", line)
 		}
-		max, err = strconv.ParseInt(nums[0], 10, 0)
+		max, err = strconv.ParseInt(nums[1], 10, 0)
 		if err != nil {
 			return int(0), int(0), "",
-				fmt.Errorf("Colon Group: max probablity is not a number; %s", line)
+				fmt.Errorf("Colon Group: max probability of range is not a number; %s", line)
 		}
 	}
 	if max != 0 && max < min {
@@ -74,18 +74,23 @@ func parseSemiItem(line string) (int, string, error) {
 	var err error
 	var min int64
 
-	fields := strings.Split(line, ",")
-	if len(fields) != 2 {
-		fields = strings.Split(line, "\t")
-		if len(fields) != 2 {
+	t := strings.TrimSpace(line)
+	if len(t) == 0 {
+		return 0, "", fmt.Errorf("blank line")
+	}
+	idx := strings.Index(line, ",")
+	if idx == -1 {
+		idx = strings.Index(line, "\t")
+		if idx == -1 {
 			return int(0), "",
-				fmt.Errorf("Colon Group: no delimter between range and text; %s", line)
+				fmt.Errorf("Semi Group: no delimiter between range and text; %s", line)
 		}
 	}
+	fields := []string{line[:idx], line[idx+1:]}
 	min, err = strconv.ParseInt(fields[0], 10, 0)
 	if err != nil {
 		return int(0), "",
-			fmt.Errorf("Colon Group: probablity is not a number; %s", line)
+			fmt.Errorf("Semi Group: probability is not a number; %s", line)
 	}
 	return int(min), fields[1], nil
 }
@@ -93,31 +98,30 @@ func parseSemiItem(line string) (int, string, error) {
 func parseVariableDeclaration(line string) (string, string, error) {
 	// Variable Format: %VariableName%,x
 	words := strings.Split(line, ",")
-	if len(words) != 2 {
-		return "", "", fmt.Errorf("Variable malformed %s", line)
-	}
 	words[0] = strings.Replace(words[0], "%", "", -1)
-	return words[0], words[1], nil
+	value := ""
+	if len(words) == 2 {
+		value = words[1]
+	}
+	return words[0], value, nil
 }
-func parseVariableAssignment(line string) (*string, int, *string, error) {
+
+func parseVariableAssignment(line string) (string, string, string, error) {
 	// Variable Format: |VariableName?x|
 	// ? is the opcode, [+-*/\><&=]
 	if line[0] != '|' && line[len(line)-1] != '|' {
-		return nil, 0, nil, fmt.Errorf("Variable assignment needs delimiters %s", line)
+		return "", "", "", fmt.Errorf("Variable assignment needs delimiters %s", line)
 	}
 	line = line[1 : len(line)-1]
 	idx := strings.IndexAny(line, "+-*/\\><&=")
 	if idx == -1 {
-		return nil, 0, nil, fmt.Errorf("No OpCode in %s", line)
+		return "", "", "", fmt.Errorf("No OpCode in %s", line)
 	}
 	op := string(line[idx])
 	name := line[:idx]
-	valstr := line[idx+1:]
-	val, err := strconv.ParseInt(valstr, 0, 0)
-	if err != nil {
-		return nil, 0, nil, fmt.Errorf("Variable value is not an integer %s in %s", valstr, line)
-	}
-	return &name, int(val), &op, nil
+	val := line[idx+1:]
+
+	return name, val, op, nil
 }
 
 func Parse(path string) (*Table, error) {
@@ -140,20 +144,36 @@ func Parse(path string) (*Table, error) {
 			line = line[:idx]
 		}
 		// trim the line
-		line = strings.TrimRight(line, "\r\n")
-		line = strings.TrimLeft(line, " ")
+		line = strings.TrimRight(line, "\t\r\n")
+		line = strings.TrimLeft(line, " \t")
 		// if there is nothing to parse go to next line
 		// blank line also closes any previous group parsing
 		if len(line) == 0 {
-			state = NO_GROUP
+			//state = NO_GROUP
+			//if group != nil {
+			//	table.AddGroup(group)
+			//	group = nil
+			//}
+			continue
+		}
+		// now we parse data lines
+		if line[0] == ':' {
+			state = COLON_GROUP
+			// Save any previous group
 			if group != nil {
 				table.AddGroup(group)
 				group = nil
 			}
-			continue
-		}
-		// now we parse data lines
-		if state == COLON_GROUP {
+			group = NewGroup(line)
+		} else if line[0] == ';' {
+			state = SEMI_GROUP
+			// Save any previous group
+			if group != nil {
+				table.AddGroup(group)
+				group = nil
+			}
+			group = NewGroup(line)
+		} else if state == COLON_GROUP {
 			if line[0] == '<' {
 				// is it a prefix?
 				group.Prefix = line[1:]
@@ -162,13 +182,22 @@ func Parse(path string) (*Table, error) {
 				group.Suffix = line[1:]
 			} else if line[0] == '_' {
 				// is it continuation
-			} else {
-				min, max, text, err := parseColonItem(line)
+				err := group.AppendLastItem("<br>" + line[1:])
 				if err != nil {
 					return nil, fmt.Errorf(errorFmt, err, lineno)
-				} else {
-					group.AddItem(min, max, text)
 				}
+			} else {
+				start, end, text, err := parseColonItem(line)
+				// for single number 'ranges' end will be == 0
+				// to complete teh range we wil set it equal to
+				// start
+				if end == 0 {
+					end = start
+				}
+				if err != nil {
+					return nil, fmt.Errorf(errorFmt, err, lineno)
+				}
+				group.AddItem(start, end, text)
 			}
 		} else if state == SEMI_GROUP {
 			if line[0] == '<' {
@@ -179,32 +208,18 @@ func Parse(path string) (*Table, error) {
 				group.Suffix = line[1:]
 			} else if line[0] == '_' {
 				// is it continuation
+				err := group.AppendLastItem("<br>" + line[1:])
+				if err != nil {
+					return nil, fmt.Errorf(errorFmt, err, lineno)
+				}
 			} else {
 				num, text, err := parseSemiItem(line)
 				if err != nil {
 					return nil, fmt.Errorf(errorFmt, err, lineno)
 				} else {
-					group.AddItem(1, num, text)
+					group.AddItem(num, 0, text)
 				}
 			}
-		} else if line[0] == ':' {
-			state = COLON_GROUP
-			// Save any previous group
-			if group != nil {
-				table.AddGroup(group)
-				group = nil
-			}
-			group = &Group{}
-			group.Name = line[1:]
-		} else if line[0] == ';' {
-			state = SEMI_GROUP
-			// Save any previous group
-			if group != nil {
-				table.AddGroup(group)
-				group = nil
-			}
-			group = &Group{}
-			group.Name = line[1:]
 		} else if line[0] == '%' {
 			// Variable Format: %VariableName%,x
 			name, value, err := parseVariableDeclaration(line)
@@ -222,19 +237,52 @@ func Parse(path string) (*Table, error) {
 			// Variable Format: |VariableName?x|
 			// ? is the opcode, [+-*/\><&=]
 
-			name, val, op, err := parseVariableAssignment(line)
+			name, newstr, op, err := parseVariableAssignment(line)
 			if err != nil {
 				err = fmt.Errorf(errorFmt, err, lineno)
 				return nil, err
 			}
-			i64, err := strconv.ParseInt(table.Variables[*name], 10, 0)
-			oval := int(i64)
-			switch *op {
-			case "+":
-				val = oval + val
-			}
 
-			table.AddVariable(*name, fmt.Sprintf("%d", oval))
+			oldstr, ok := table.GetVariable(name)
+			var oldval float64
+			var newval float64
+			if ok {
+				oldval, _ = strconv.ParseFloat(oldstr, 32)
+			} else {
+				oldval = 0.0
+			}
+			newval, _ = strconv.ParseFloat(newstr, 64)
+			// process the op to create the new string value
+			// that wiil be stored under the variable 'name'
+			switch op {
+			case "+":
+				newstr = fmt.Sprintf("%f", oldval+newval)
+			case "-":
+				newstr = fmt.Sprintf("%f", oldval-newval)
+			case "*":
+				newstr = fmt.Sprintf("%f", oldval*newval)
+			case "/":
+				newstr = fmt.Sprintf("%f", oldval/newval)
+			case "\\":
+				newstr = fmt.Sprintf("%d", int(oldval/newval))
+			case ">":
+				if newval <= oldval {
+					newstr = oldstr // re-assign old value to variable
+				}
+			case "<":
+				if newval >= oldval {
+					newstr = oldstr
+				}
+			case "&":
+				// string catenation
+				newstr = oldstr + newstr
+			case "=":
+				// noop, this will just assign newstr to the variable
+			default:
+				return nil, fmt.Errorf("Unknown OpCode in %s", line)
+			}
+			// will add or update variable
+			table.AddVariable(name, newstr)
 		}
 	}
 	if group != nil {

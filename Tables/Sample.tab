@@ -1,0 +1,60 @@
+# Sample table
+
+%Foo%,112
+
+:Start
+1,You see {AorAn~[Creature]} with a [Treasure.Coins], worth {Dice~1d6*1000} experience
+_It has [Gear]
+_{If~%Foo% > 100, Warrior / Wizard}
+_[Color] fire
+
+:Creature
+1-2,Orc
+3,Skeleton
+4-7,Archdaemon
+8,[Goblins.Start]
+9,[Color] Spirit
+
+# Colors for the various spirits
+:Color
+<a 
+>glow reveals the 
+1,{Color~Red,Red}
+2-3,{Color~White,White}
+4,{Color~Blue,Blue}
+
+
+;Gem
+<a shiny
+8,Agate
+1,Alexandrite
+1,Amethyst
+1,Aquamarine
+1,Bloodstone
+1,Carnelian
+8,Citrine
+1,Diamond
+1,Emerald
+8,Garnet
+1,Jade
+1,Lapis lazuli
+1,Moonstone
+1,Morganite
+1,Onyx
+6,Opal
+1,Pearls
+8,Peridot
+1,Ruby
+1,Sapphire
+8,Spinel
+8,Tanzanite
+1,Topaz
+1,Tourmaline
+1,Turquoise
+8,Zircon
+
+:Gear
+1,Belt with
+_Knife
+_Fire striker
+_Dice

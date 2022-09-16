@@ -19,6 +19,11 @@ var listCmd = &cobra.Command{
 	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
 
+		showAll, err := cmd.Flags().GetBool("all")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 		env_root := os.Getenv("RTBL_TABLE_ROOT")
 		root, err := cmd.Flags().GetString("root")
 		if err != nil {
@@ -28,12 +33,19 @@ var listCmd = &cobra.Command{
 		if len(root) == 0 {
 			root = env_root
 		}
-		if len(root) > 0 && root[0] != '/' {
-			root = env_root + "/" + root
+		if len(root) == 0 { // even after checking getopt and the flag
+			root = "."
 		}
+
 		if len(args) > 0 {
 			for _, name := range args {
-				reg, err := tables.List(root + "/" + name)
+				var path string
+				if root != "" {
+					path = root + "/Tables/" + name
+				} else {
+					path = name
+				}
+				reg, err := tables.List(path, showAll)
 				if err != nil {
 					fmt.Println(err)
 					return
@@ -43,7 +55,7 @@ var listCmd = &cobra.Command{
 				}
 			}
 		} else {
-			reg, err := tables.List(root)
+			reg, err := tables.List(root+"/Tables", showAll)
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -66,5 +78,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	listCmd.Flags().BoolP("all", "a", false, "Show hidden catagores/tables also")
 }

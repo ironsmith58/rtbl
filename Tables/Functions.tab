@@ -1,0 +1,26 @@
+
+%Var1%,apple
+
+:Start
+1,[Noof]{Space~3}{Mid~3,7,Dungeon of Doom}
+_Box of gems, 
+_{UCase~[Lower]}
+_{VowelStart~%Var1} Var1(%Var1) starts with a vowel
+_{VowelStart~orange} Orange starts with a vowel
+
+:Prompt
+1,{InputList~1,Please enter the choice of gem:,Ruby,Diamond,Saphire}
+
+
+;Noof
+1,red
+2,green
+3,yellow
+4,{LCase~[Caps]}
+
+;Caps
+1,LOWER CASE
+
+;Lower
+1,upper case
+

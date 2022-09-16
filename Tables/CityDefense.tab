@@ -1,0 +1,51 @@
+# ---------------------------------------------------
+# Last Update: verified by Valminder Jan 30, 2006.
+# ---------------------------------------------------
+#
+# City Defenses
+#
+# From the Cities of Mystery Box set
+#
+# Modified by GALusak@hotmail.com
+#
+# Modified by Valminder April 2002
+#    I changed the "START" line.
+#
+# Modified by Valminder, Jan 2006.
+#    Adapted for TSv5.
+#    I changed the "START" line.
+#
+
+:Start
+1,{Status~From Cities of Mystery boxed set (TSR).}
+_[Defense].
+
+;Defense
+7,None
+20,City Walls only
+10,Water only
+1,Magic only
+27,Sentries / Guards / Militia only
+1,Sentries / Guards / Militia and Magic 
+15,Sentries / Guards / Militia and City Walls 
+1,Sentries / Guards / Militia, City Walls and Magic  
+8,Sentries / Guards / Militia and Water 
+1,Sentries / Guards / Militia, Water and Magic 
+11,Sentries / Guards / Militia, Water and City Walls 
+1,Sentries / Guards / Militia, City Walls and Magic 
+3,Friendly Monster only
+1,Friendly Monster and Magic 
+3,Friendly Monster and City Walls 
+1,Friendly Monster, City Walls and Magic 
+2,Friendly Monster, City Walls and Water
+1,Friendly Monster, Water, City Walls and Magic
+2,Air Patrol only
+1,Air Patrol and Magic 
+2,Air Patrol and Sentries / Guards / Militia
+1,Air Patrol, Sentries / Guards / Militia and Magic
+3,Air Patrol, Sentries / Guards / Militia and City Walls 
+1,Air Patrol, Sentries / Guards / Militia, City Walls and Magic
+3,Air Patrol, Sentries / Guards / Militia, City Walls and Water
+1,Air Patrol, Sentries / Guards / Militia, City Walls, Water and Magic
+2,Air Patrol, Sentries / Guards / Militia, Friendly Monster, City Walls and Water
+1,Air Patrol, Sentries / Guards / Militia, Friendly Monster, City Walls, Water and Magic

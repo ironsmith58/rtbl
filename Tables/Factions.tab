@@ -1,0 +1,40 @@
+# level may be from 1-8
+# level 1 is a street gang
+# level 7 is a planetary government
+# level 8 is a regional government/coalition
+|level=12|
+
+:Start
+1,Name:
+_Hit Points: {Dice~3d6*%level%}
+_Force Rating: %level%
+_Cunning Rating: {Dice~1d8}
+_Wealth Rating: {Dice~2d8+%level%/3}
+_Faction Credits: 
+_Homeworld:
+_Tags: [Tags] [Tags]
+
+
+# Exclamation means an entry rom this group can only appear once
+;!Tags
+1,Colonists
+1,Deep Rooted in homeworld
+1,Eugenics Cult
+1,Exchange Consulate
+1,Fanatical
+1,Imperialists
+1,Machiavellian
+1,Mercenary Group
+1,Perimeter Agency
+1,Pirates
+1,Planeteray Govt
+1,Plutocratic
+1,Preceptor Archive
+1,Psychic Acedemy
+1,Savage
+1,Scavengers
+1,Secretive
+1,Technical Expertise
+1,Theocratic
+1,Warlike
+

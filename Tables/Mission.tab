@@ -1,0 +1,264 @@
+#
+# Mission Generator
+#
+:Start
+1-2,[Advise].
+3-4,Arrest [Target].
+5-7,Bodyguard, Protect [Target] from [Enemy].
+8-10,Capture, Return [Target] to [Target].
+11-13,Defend, Protect a/the [Installation] from [Enemy].
+14-16,[DeliverMessage].
+17-19,Destroy [Destroy].
+20-22,Provide [Disastersupport].
+23-25,Distract [Enemy] So another team can perform the Primary mission.
+26-28,Guard [Ally] from [Enemy].
+29-30,Hijack a ship from [Enemy].
+31-33,[Hunt].
+34-36,[Infiltrate].
+37-39,[Investigate].
+40-42,Medieate between [Mediate] and [Mediate].
+43-45,Negotiate between [Ally] and [Ally], [Complication].
+46,Neutralize [Target+50].
+47-49,Oversee a/an [Start].
+50-52,[Puzzle].
+53-55,Raid [Enemyfaction] [Holding].
+56-58,[Recover].
+59-61,[Repair].
+62-64,Rescue [Rescue].
+65-67,Research [Research].
+68-90,Scout a new world
+91-93,Surveillance of [Surveillance]
+94-96,Test a New piece of Equipment on [Start]
+97-99,Transport [Target] Prisoner, [Complication]
+100-103,Transport [Aliensuper] Relic/Artifact, [Complication]
+104,Transport the Data/Intelligence
+105,But you Start this Mission Offworld [Start-1]
+
+#Line 35
+:Advise
+1-60, Advise a [Allyfaction] about Earth Technology on loan. [Complication]
+61-90, Train a [Allyfaction] a necessary skill (e.g. farming, Survival, Etc). [Complication]
+91-100, Brief Third party about [Allyfaction] encountered beyond stargate. [Complication]
+
+:Ally
+01-20, Psyonic Alliance personnel
+21-30, Allied Alien species
+31-50, Near human culture
+51-60, TL5+ Faction
+61-70, TL3 Rebels
+71-75, Rheol
+76-80, Ancient Aliens (hidden as human?)
+81-90, A Betraying Goa'uld System Lord
+91-93, New Human Faction
+94-95, Newly discovered alien species
+96-100, Per GM discretion
+
+:Complication
+1, [Enemyfaction] Has sent agents to stop you
+2, a [Target] is also attempting to achieve the same mission
+3, [Enemy] are active in the area
+4, Gate Tavel is impossible for 2d3-1 Days
+5, Gate travel is impossible for 8d4 Hours
+6, You must not be recognised as SGc personnel
+7, also recover [Aliensuper] Artifact
+8, A horrible disease will start in 1d8 hours and [Complication-2]
+9, Now with added [Enemy=102]
+
+:Target
+01-10, a Renegade SGC member or Team
+11-50, NID operative or Team
+51-55, Another Earth native
+56-80, Renegade TL5+
+81-90, Renegade TL3
+91-100, GM discretion
+101-115, An New Alien Race
+116-121, A Near Human Alien
+122, Renegade Gou'ald operating on Earth
+123-132, Alien Bounty Hunter
+
+:Enemy
+01-20, Operative sent by as-yet-undiscovered alien race
+21-30, Alien bounty hunter
+31-40, NID operative
+41-60, NID strike team
+61-80, Jaffa squad
+81-90, Jaffa squad led by a First Prime
+91-100, Goa'uld System Lord
+101, Zombies
+102, Undead
+103-113, Previously encountered enemy alien race/New enemy race
+114-119, Replicators 
+
+:Enemyfaction
+01-90, Pirates
+91-100, Known Enemy alien race
+101, New enemy alien race
+102, Robots
+103, Corporation
+
+:Allyfaction
+1-90, Near Human Culture
+91-00, Alien Species 
+101, Per GM discretion
+
+#Line 100
+:Holding
+1-10, Bolthole 20DP
+11-40, Defensive military 20DP
+41-80, Industrial 25DP
+81-99, Offensive military 25DP
+100-150, Raw MAterials 15DP
+151-161, Research 30DP
+162-204, Slave population 15DP
+205, Stronghold 0DP Major Misson
+206-220, Training 20DP
+221-231, Recreation 10DP
+
+:Installation
+01-30, SGC
+31-35, Tok'Ra safehouse
+36-41, Tok'Ra Base
+41-60, Rebel Gang Village 
+61-71, Pirate Base
+71-85, Near Human [Habitation]
+86-90, TL5+
+91-100, Per GM Discretion
+
+:Habitation
+1-50, Village
+51-65, Town
+66-70, City
+71-75, Base
+76-80, Castle or Fortified position
+81-100, [Building]
+
+:Building
+1-10, Important Citizens Home
+11-21, Research Lab
+22-50, Temple or place of worship
+51, Temple or Place of worship that is really a [Aliensuper] ruin
+
+:Aliensuper
+1-8, Ancient
+9-15, Asgard
+16-18, Ohnes
+19-21, New Ancient Race
+22, Annukai
+23-24, Nox
+25, Furling
+
+:DeliverMessage
+01-30, Deliver message to offworlder cell [Complication]
+31-40, Deliver message to rebel cell [Complication]
+41-70, Deliver message to other informant [Complication]
+71-85, Deliver message to Near Human allies [Complication]
+86-90, Deliver message to Ally High Command [Complication]
+91-100, Per GM discretion
+
+:Destroy
+01-20, Enemy plans 
+21-40, [Aliensuper] Relic/artifact 
+41-70, [Enemy] Weapon 
+71-90, [Enemy] [Habitation]
+91-95, Goa'uld vessel 
+96-100, Per GM discretion
+
+:Disastersupport
+01-30, Assist near human species following recent natural disaster
+31-45, Assist near human species with current natural disaster
+46-55, Assist near human species following recent attack
+56-60, Assist near human species with current attack
+61-70, Assist Tok'ra or Jaffa following recent natural disaster
+71-80, Assist Tok'ra or Jaffa with current natural disaster
+81-85, Assist Tok'ra or Jaffa following recent attack
+86-90, Assist Tok'ra or Jaffa with current attack
+91-95, Assist Asgard following recent replicator attack
+96-100, Assist Asgard with current replicator attack
+
+:Hunt
+01-30,	Subdue creature harassing SGC
+31-50,	Capture creature harassing SGC
+51-55,	Kill creature harassing SGC
+56-70,	Subdue creature harassing near human species
+71-80,	Capture creature harassing near human species
+81-85,	Kill creature harassing near human species
+86-90,	Subdue creature harassing newly discovered alien species
+91-95,	Capture creature harassing newly discovered alien species
+96-100,	Kill creature harassing newly discovered alien species
+
+:Infiltrate
+01-15, Gain intelligence about Jaffa/Goa'uld installation/vehicles/weapons/plans
+16-30, Sabotage Jaffa/Goa'uld gear/vehicles/weapons/plans
+31-45, Destroy Jaffa/Goa'uld gear/vehicles/weapons/plans
+46-60, Gain intelligence about near human installation/ vehicles/ weapons/plans
+61-75, Sabotage near human gear/vehicles/weapons/plans
+76-90, Destroy near human gear/vehicles/weapons/plans
+91-98, Gain intelligence about newly discovered species' installation/vehicles/weapons/plans
+99, Sabotage newly discovered species gear/vehicles/weapons/plans
+100, Destroy newly discovered species gear/vehicles/weapons/plans
+
+:Investigate
+01-20, Appearance of new alien species
+21-30, Theft of critical SGC or ally gear/weapon/vehicle/data
+31-40, Death of [Ally]
+41-50, Unusual space/time distortion
+51-55, Change to character (e.g. he regresses to 15 years old, he slips out of phase, etc.)
+56-100, Per GM discretion
+
+:Mediate
+01-02, Uninformed Earth agency
+03-10, Earth agency
+11-30, United Nations
+31-40, SGC department
+41-60, Near human species
+61-70, Jaffa
+71-80, Tok'ra
+81-85, Asgard
+86-100,	Newly discovered alien species
+
+:Puzzle
+01-20, Traverse [Aliensuper] site
+21-40, Obtain [Aliensuper] relic/artifact within maze
+41-60, Escape Goa'uld death trap
+61-80, Uncover secret behind strange circumstances on newly visited world
+81-100, Per GM discretion
+
+:Recover
+01-10, Recover alien technology from NID
+11-20, Recover alien technology from uninformed Earth agency
+21-50, Recover advanced Earth or alien technology from neutral off-world species
+51-90, Recover stolen object/technology from Jaffa/Goa'uld
+91-100, Per GM discretion
+
+:Repair
+01-05, Repair a human-built device targeted by the NID
+06-20, Repair a human-built device targeted by a near human species
+21-40, Repair a human-built device targeted by the Goa'uld
+41-50, Repair a human-built device targeted by a newly discovered alien species
+51-55, Repair an alien device targeted by the NID
+56-70, Repair an alien device targeted by a near human species
+71-90, Repair an alien device targeted by the Goa'uld
+91-100, Repair an alien device targeted by a newly discovered alien species
+
+:Rescue
+01-10,	Rescue captured SGC team member from NID
+11-15,	Rescue captured ally from NID
+16-40,	Rescue captured SGC team member from adversarial off-world species
+41-50,	Recover captured ally from adversarial off-world species
+51-80,	Rescue captured SGC team member from [Enemyfaction]
+81-90,	Recover captured ally from [Enemyfaction]
+91-100,	Per GM discretion
+
+:Research
+01-20,	[Aliensuper] Ancient site
+21-50,	Natural planetary phenomenon
+51-75,	Natural stellar phenomenon
+76-100,	Per GM discretion
+
+:Surveillance
+1-80, [Enemy]
+81-91, [Enemyfaction]
+92-100, [Ally]
+101-105, Suspected [Aliensuper] site
+106-115, [Allyfaction]
+116-190, [Target], [Complication]

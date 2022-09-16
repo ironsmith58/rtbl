@@ -3,14 +3,114 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
+    
     "configurations": [
+
         {
-            "name": "Launch Package",
+            "name": "List ~/rpgtables",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "/home/ewolcott/rtbl",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["list", "-r", "/home/ewolcott/rpgtables"]
+        },
+        {
+            "name": "List <nil>",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["list"]
+        },
+        {
+            "name": "Postrophe",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["new", "-r", "testtabs", "cn"]
+        },
+        {
+            "name": "Gen SWN Society",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["new", "-r", "/home/ewolcott/rpgtables/swn", "Society"]
+        },
+        {
+            "name": "Parse table for errors",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["parse", "-r", "testtabs", "Sample"]
+        },
+
+        {
+            "name": "New Roll on table",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
             "args": ["new", "-r", "/home/ewolcott/tsmith/Tables/Mission", "Generator"]
+        },
+        {
+            "name": "Roll on Local Table",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "cwd": "${workspaceFolder}/testtabs",
+            "args": ["new", "Factions"]
+        },
+        {
+            "name": "Roll Factions",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["new", "-r", "/home/ewolcott/go/src/rtbl/testtabs", "Factions"]
+        },
+        {
+            "name": "Roll Test",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["new", "-r", "testtabs", "Sample"]
+        },
+        {
+            "name": "Roll Name",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["new", "-r", "/home/ewolcott/rtbl/testtabs", "name"]
+        },
+        {
+            "name": "Roll Cargo",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["new", "-r", "/home/ewolcott/tsmith/Tables", "Future/Cargo"]
+        },
+        {
+            "name": "Roll Functions",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["new", "-r", "testtabs", "Functions"]
+        },
+        {
+            "name": "Roll Dice",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": ["roll", "Dmg", "8-2d6" ]
         }
     ]
 }

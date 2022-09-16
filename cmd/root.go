@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Eric F. Wolcott <efwolcott@gmail.com>
 
 */
 package cmd
@@ -13,8 +13,8 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "rtbl",
-	Short: "create random results from tables in files",
-	Long:  "",
+	Short: "create random results from tables in files, similar to TableSmith",
+	Long:  "This is a command line tool that will read TableSmith tables.  TableSmith was written by Bruce Gulke and has many more features that are present here.  See the tablesmith homepage; http://www.mythosa.net/p/tablesmith.html",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -30,5 +30,5 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringP("root", "r", "", "table directory")
+	rootCmd.PersistentFlags().StringP("root", "r", "", "root directory directory to start table lookup. \nEnvironment variable RTBL_TABLE_ROOT may be set\ninstead of using this flag.")
 }

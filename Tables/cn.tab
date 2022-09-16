@@ -1,0 +1,400 @@
+
+;Start
+1,Violl’s Garden
+
+
+;Name
+1,Adaving
+1,Adenaphis
+1,Adurant
+1,Aenor’s Hill
+1,Aerilon
+1,Agosrora
+1,Akhila
+1,Amram
+1,Andbridge
+1,Andoginia
+1,Andson
+1,Anegend
+1,Anfauglith
+1,Apralo
+1,Aqrathe
+1,Aquarin
+1,Aramoor
+1,Ardross
+1,Aresridge
+1,Arlan’s Way
+1,Arnor
+1,Arrendyll
+1,Asharc
+1,Ashdrift
+1,Asostin
+1,Atredo
+1,Avaglade
+1,Azmar
+1,Bakland
+1,Battlecliff
+1,Bay of Balar
+1,Begger’s Hole
+1,Beleriand
+1,Black Hollow
+1,Blue Field
+1,Bluufling
+1,Boatwright
+1,Bobus
+1,Breles
+1,Briar Glen
+1,Brickelwhyte
+1,Brilthor
+1,Broken Shield
+1,Bruaport
+1,Bruinen
+1,Bullmar
+1,Camorrus
+1,Carran
+1,City of Fire
+1,Ciwood
+1,Clanbu
+1,Clerphis
+1,Cliever
+1,Clunard
+1,Clunard[Suffix]
+1,Coalfell
+1,Corralis
+1,Craso
+1,Crelcaster
+1,Creles
+1,Creles[Suffix]
+1,Crow’s Cry
+1,Crurora
+1,Cullfield 
+1,Curith
+1,Darendale
+1,Darkwell
+1,Deathfall
+1,Death’s Door
+1,Dimbar
+1,Doonatel
+1,Doriath
+1,Dorlomin
+1,Dorthonion
+1,Doveseal
+1,Doveshire
+1,Dragon’s Coast
+1,Dropolis
+1,Drurg
+1,Dry Gulch
+1,Duarudelf
+1,Duskendale
+1,East Armistice
+1,Eastford
+1,Easthaven
+1,Eastwatch
+1,Ecrin
+1,Eden’s Gulf
+1,Edoport
+1,Ehosa
+1,Eimcester
+1,Ekaia
+1,Ekasea
+1,Elbright
+1,Eldarmar
+1,Elesburgh
+1,Embertown
+1,Encesa
+1,End’s Run
+1,Erast
+1,Ered
+1,Erede
+1,Eredluin
+1,Eribourne
+1,Esasea
+1,Eslario
+1,Esleles
+1,Esterport
+1,Etaxver
+1,Ethermoor
+1,Ezheles
+1,Fallenedge
+1,Fangorn
+1,Far Water
+1,Feridge
+1,Fiktin
+1,Firebend
+1,Firecrow
+1,Flamouth
+1,Fleehull
+1,Flont
+1,Fool’s March
+1,Frale
+1,Freevale
+1,Fregow
+1,Fropus
+1,Frostenvale
+1,Frostfangs
+1,Frostford
+1,Garen’s Well
+1,Glaskerville
+1,Goldcrest
+1,Goldenleaf
+1,Greenflower
+1,Greenglade
+1,Greenloft
+1,Gruuford
+1,Gulltown
+1,Haburgh
+1,Haran
+1,Harlen
+1,Harsengaard
+1,Herrith
+1,Heugate
+1,Hillfar
+1,Hogsfeet
+1,Hollyhead
+1,Horizon’s End
+1,Hull
+1,Huyphia
+1,Hwen
+1,Icemeet
+1,Ifalphis
+1,Ihodon
+1,Inasver
+1,Inerora
+1,Inetin
+1,Inridge
+1,Irieby
+1,Irieby[Suffix]
+1,Irieson
+1,Iron Hills
+1,Ironforge
+1,Irragin
+1,Istrisling
+1,Iyrurgh
+1,Jarren’s Outpost
+1,Jita
+1,Jongvale
+1,Jord
+1,Jutgend
+1,Juxginia
+1,Kara’s Vale
+1,Kence
+1,Khaco
+1,Khark
+1,Kheburn
+1,Khiayton
+1,Khodridge
+1,Klison
+1,Klork
+1,Knife’s Edge
+1,Krifmore
+1,Krikpolis
+1,Krunlas
+1,Krupus
+1,Krutfield
+1,Kuver
+1,Kuville
+1,Lakeshore
+1,Lakestown
+1,Lamorra
+1,Last Lock
+1,Leeside
+1,Legolin
+1,Lihull
+1,Linesse
+1,Lochley
+1,Lothlann
+1,Luapdale
+1,Lullin
+1,Maglor’s Gap
+1,Mahalaga
+1,Marren’s Eve
+1,Meesa
+1,Merriwich
+1,Millstone
+1,Moonbright
+1,Mountmend
+1,Nandungorteb
+1,Nargorthon
+1,Nearon
+1,New Cresthill
+1,Ninas
+1,Nogrod
+1,Noria
+1,Northpass
+1,Northstead
+1,Northtown
+1,Nufby
+1,Nuxvar
+1,Oakensword
+1,Oakheart
+1,Oar’s Rest
+1,Ockburn
+1,Odalo
+1,Ohushull
+1,Oitrough
+1,Old Ashton
+1,Onavine
+1,Oning
+1,Oniton
+1,Onoln
+1,Oqosas
+1,Ordlas
+1,Ordsas
+1,Orkton
+1,Orrinshire
+1,Ozryn
+1,Pavv
+1,Peebus
+1,Peexnard
+1,Pella's Wish
+1,Penlas
+1,Phixsas
+1,Phoburn
+1,Pineland
+1,Pinnella Pass
+1,Pleansas
+1,Pleansas[Suffix]
+1,Plerton
+1,Plikta
+1,Pony Run
+1,Pran
+1,Prarc
+1,Prarc[Suffix]
+1,Priron
+1,Prosa
+1,Pyreacre
+1,Qesa
+1,Qever
+1,Qico
+1,Qroptin
+1,Quan Ma
+1,Queenstown
+1,Ramshorn
+1,Ratol
+1,Ratol[Suffix]
+1,Red Hawk
+1,Rhaunar
+1,Rhudaur
+1,Rhuin
+1,Rivermouth
+1,Riverwind
+1,Ront
+1,Rusginia
+1,Saker Keep
+1,Seameet
+1,Secsall
+1,Seuledo
+1,Shadestown
+1,Shiny Ship
+1,Ship’s Haven
+1,Sholk
+1,Shustead
+1,Silverkeep
+1,Slumouth
+1,Snake’s Canyon
+1,Snowforge
+1,Snowmelt
+1,South Warren
+1,Southern Vale
+1,Squall’s End
+1,Srark
+1,Sront
+1,Sront[Suffix]
+1,Stiaburn
+1,Stonewatch
+1,Stone’s Throw
+1,Strery
+1,Strong Oak
+1,Strowell
+1,Suilwen
+1,Sundance
+1,Swordbreak
+1,Tarrin
+1,Taur-in-duinath
+1,Tence
+1,Thales
+1,The Gale
+1,The Last Battle
+1,Three Streams
+1,Tont
+1,Trego
+1,Trudid
+1,Tunard
+1,Ubbin Falls
+1,Ucrerton
+1,Ula’ree
+1,Ulcester
+1,Ulcester[Suffix]
+1,Urgsa
+1,Uvramore
+1,Vale of Doom
+1,Valley of Dusk
+1,Veritas
+1,Vertrock
+1,Violl’s Garden
+1,Vludson
+1,Vrepus
+1,Vroln
+1,Vruport
+1,Vrutin
+1,Wellspring
+1,Wephia
+1,Westend
+1,Westwend
+1,Whiteridge
+1,Whiterun
+1,Widow’s Peak
+1,Willowdale
+1,Windrip
+1,Wintergale
+1,Wintervale
+1,Wolfden
+1,Wolfsrealm
+1,Wrila
+1,Wrila[Suffix]
+1,Wruorport
+1,Wuysa
+1,Xan’s Bequest
+1,Xaysall
+1,Xynnar
+1,Yarrin
+1,Yausbury
+1,Yawell
+1,Yeham
+1,Yeham[Suffix]
+1,Yellowseed
+1,Yerton
+1,Yhaco
+1,Yi Ti
+1,Ylousbert
+1,Yrin
+1,Yuihwood
+1,Zao Ying
+1,Zeffari
+1,Zence
+1,Zhando
+1,Zhasta
+1,Zhehwood
+1,Zhepbury
+1,Zlaifmery
+1,Zleakstead
+1,Zline
+1,Zlodon
+1,Zlork
+1,Zlosall
+1,Zricester
+1,Zripsas
+1,Zruekham
+1,Zumka
+
+;Suffix
+1,burg
+1,bury
+1,mont
+1,ton
+1,town
+1,tun
+1,ville
+1,vil
+1,port
+1,opolis
