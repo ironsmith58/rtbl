@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"sort"
 	"strings"
 
 	//"errors"
@@ -43,32 +44,104 @@ func QuickParse(filePath string) ([]string, error) {
 	return groups, nil
 }
 
-func List(root string, showAll bool) ([]Table, error) {
+func FindTables(root string) (paths []string, err error) {
 
-	var result []Table
+	var result []string
 
-	err := filepath.Walk(root, func(filePath string, info os.FileInfo, err error) error {
+	err = filepath.Walk(root, func(filePath string, info os.FileInfo, err error) error {
 		if err != nil {
 			fmt.Println(err)
 			return err
 		}
-		if filePath == root { // lets not print our starting point
-			return nil
-		}
+
 		if !info.IsDir() {
 			if strings.HasSuffix(filePath, ".tab") {
-				name := path.Base(filePath)
-				name = strings.TrimSuffix(name, ".tab")
-				if name[0] != '~' || showAll {
-					fmt.Println("    ", name)
-				}
+				result = append(result, filePath)
 			}
-		} else {
-			name := path.Base(filePath)
-			fmt.Println("Category: ", name)
 		}
-
 		return nil
 	})
 	return result, err
+}
+
+type TablesByCategory map[string][]string
+
+func NewTablesByCategory(paths []string) TablesByCategory {
+
+	tables := make(TablesByCategory)
+
+	// make a map of all tables in all catagories
+	// tables are paths that end in .tab
+	// categories are the containing directory
+	// e.g. Names/Greek.tab
+	for _, filepath := range paths {
+		if strings.HasSuffix(filepath, ".tab") {
+			name := path.Base(filepath)
+			name = strings.TrimSuffix(name, ".tab")
+			dir := path.Base(path.Dir(filepath))
+			tables[dir] = append(tables[dir], name)
+		}
+	}
+	return tables
+}
+
+type LoadedTable struct {
+	path  string
+	table *Table
+}
+
+type TablePathsByName map[string]*LoadedTable // map table name to paths
+
+func NewTableList(paths []string) TablePathsByName {
+
+	tables := make(TablePathsByName)
+
+	// make a map of all tables in all catagories
+	// tables are paths that end in .tab
+	// categories are the containing directory
+	// e.g. Names/Greek.tab
+	for _, filepath := range paths {
+		if strings.HasSuffix(filepath, ".tab") {
+			name := path.Base(filepath)
+			name = strings.TrimSuffix(name, ".tab")
+			name = strings.ToLower(name) // hold all names as lower case
+			tables[name] = &LoadedTable{filepath, nil}
+		}
+	}
+	return tables
+}
+
+func PrintPaths(tables TablesByCategory, showAll bool) {
+
+	// sort the keys(categories) so they
+	// show 'in order'
+	var keys = make([]string, 0, len(tables))
+	for k := range tables {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	// now print the structured categories and tables
+	for _, cat := range keys {
+		fmt.Println(cat)
+		sort.Strings(tables[cat])
+		for _, table := range tables[cat] {
+			fmt.Println("  ", table)
+		}
+	}
+}
+
+// Most import Variable -- holds all table referecnes where
+// Parse/Lookup can find tables ....
+var TableRegistry TablePathsByName
+
+func LoadAllTables(rootpath string) error {
+	paths, err := FindTables(rootpath)
+	if err != nil {
+		return err
+	}
+	if len(paths) == 0 {
+		return fmt.Errorf("No tables found")
+	}
+	TableRegistry = NewTableList(paths)
+	return nil
 }

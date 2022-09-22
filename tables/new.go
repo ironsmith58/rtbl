@@ -95,7 +95,7 @@ func (t *Table) OldRoll(gn string) string {
 	s := g.Roll()
 
 	var result string
-	// Replace all table refernces with text
+	// Replace all table references with text
 	for j := 0; j < len(s); j++ {
 		c := s[j]
 		if c == '[' { // reference to another table
@@ -106,7 +106,20 @@ func (t *Table) OldRoll(gn string) string {
 				j++
 			}
 			//j++ // skip past close bracket
-			result = result + t.Roll(refgroup)
+			foreigncall := strings.Split(refgroup, ".")
+			switch len(foreigncall) {
+			case 1:
+				result = result + t.Roll(refgroup)
+			case 2:
+				nt, err := Parse(foreigncall[0])
+				if err != nil {
+					fmt.Printf("Syntax Error: Error parsing Table, %s in %s\n", refgroup, t.Path)
+				} else {
+					result = result + nt.Roll(foreigncall[1])
+				}
+			default:
+				fmt.Printf("Syntax Error: Table call, %s in %s\n", refgroup, t.Path)
+			}
 		} else {
 			result = result + string(c)
 		}
@@ -148,6 +161,13 @@ func (t *Table) OldRoll(gn string) string {
 			}
 			//j++ // skip past close bracket
 			words := strings.Split(fcall, "~")
+			// TODO i := strings.Index(fcall, "~")
+			if len(words) != 2 {
+				fmt.Printf("Syntax Error: Builtin call has no ~, %s in %s\n",
+					fcall,
+					t.Path)
+				continue
+			}
 			res, err := BuiltinCall(t, words[0], words[1])
 			if err != nil {
 				fmt.Printf("Error: %s(%s): %s\n", words[0], words[1], err)

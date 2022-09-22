@@ -30,5 +30,12 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringP("root", "r", "", "root directory directory to start table lookup. \nEnvironment variable RTBL_TABLE_ROOT may be set\ninstead of using this flag.")
+	env_root := os.Getenv("RTBL_TABLE_ROOT")
+	help := "root directory directory to start table lookup. \n"
+	help += "Environment variable RTBL_TABLE_ROOT may be set\n"
+	help += "instead of using this flag.\n"
+	if env_root != "" {
+		help += "RTBL_TABLE_ROOT=" + env_root
+	}
+	rootCmd.PersistentFlags().StringP("root", "r", "", help)
 }

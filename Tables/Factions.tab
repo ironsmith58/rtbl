@@ -5,7 +5,7 @@
 |level=12|
 
 :Start
-1,Name:
+1,Name: [name.Start]
 _Hit Points: {Dice~3d6*%level%}
 _Force Rating: %level%
 _Cunning Rating: {Dice~1d8}

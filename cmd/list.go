@@ -37,6 +37,8 @@ var listCmd = &cobra.Command{
 			root = "."
 		}
 
+		var paths []string
+
 		if len(args) > 0 {
 			for _, name := range args {
 				var path string
@@ -45,25 +47,21 @@ var listCmd = &cobra.Command{
 				} else {
 					path = name
 				}
-				reg, err := tables.List(path, showAll)
+				tpaths, err := tables.FindTables(path)
 				if err != nil {
 					fmt.Println(err)
-					return
 				}
-				for _, tab := range reg {
-					fmt.Println(tab.Name)
-				}
+				paths = append(paths, tpaths...)
 			}
 		} else {
-			reg, err := tables.List(root+"/Tables", showAll)
+			paths, err = tables.FindTables(root + "/Tables")
 			if err != nil {
 				fmt.Println(err)
-				return
-			}
-			for _, tab := range reg {
-				fmt.Println(tab.Name)
 			}
 		}
+		tabs := tables.NewTablesByCategory(paths)
+		tables.PrintPaths(tabs, showAll)
+
 	},
 }
 

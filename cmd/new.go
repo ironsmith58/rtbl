@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 
+	"golang.org/x/term"
+
 	md "github.com/JohannesKaufmann/html-to-markdown"
 	"github.com/spf13/cobra"
 	"jaytaylor.com/html2text"
@@ -95,20 +97,30 @@ var newCmd = &cobra.Command{
 			root = env_root
 		}
 
+		// Load all tables to table registry
+		var rootpath string
+		if root != "" {
+			// humans might enter the path with a wildcard that expands to
+			// contain the Tables sub-dir
+			if !strings.HasSuffix(root, "/Tables") && !strings.HasSuffix(root, "/Tables/") {
+				rootpath = root + "/Tables/"
+			} else {
+				rootpath = root
+			}
+		} else {
+			rootpath = "./Tables"
+		}
+		err = tables.LoadAllTables(rootpath)
+		//paths, err := tables.FindTables(rootpath)
+		//tableList := tables.NewTableList(paths)
 		tablenames := args
-
 		for _, tn := range tablenames {
 
 			tc, err := parseCall(tn)
-			var path string
-			if root != "" {
-				path = root + "/Tables/" + tc.table + ".tab"
-			} else {
-				path = tc.table + ".tab"
-			}
-			parsedTable, err := tables.Parse(path)
+
+			parsedTable, err := tables.Parse(tc.table)
 			if err != nil {
-				fmt.Println(path, ":", err)
+				fmt.Println(tn, ":", err)
 				return
 			}
 			html := parsedTable.Roll(tc.group)
@@ -117,7 +129,31 @@ var newCmd = &cobra.Command{
 			case "html":
 				fmt.Println(html)
 			case "text":
-				text, err := html2text.FromString(html, html2text.Options{PrettyTables: true})
+				colWidth := 70
+				widthOpt, err := cmd.Flags().GetInt("width")
+				if widthOpt > 0 {
+					colWidth = widthOpt
+				} else {
+					width, _, err := term.GetSize(0)
+					if err != nil {
+						colWidth = 72
+					} else {
+						// never make output too small]
+						if colWidth > 23 {
+							colWidth = int(float64(width) * .75)
+						} else {
+							colWidth = width
+						}
+					}
+				}
+
+				pto := html2text.NewPrettyTablesOptions()
+				pto.ColWidth = colWidth
+				text, err := html2text.FromString(html,
+					html2text.Options{
+						PrettyTables:        true,
+						PrettyTablesOptions: pto,
+					})
 				if err != nil {
 					panic(err)
 				}
@@ -148,4 +184,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	newCmd.Flags().StringP("export", "x", "text", "output format (text,html,md)")
+	newCmd.Flags().IntP("width", "w", 0, "width of text output")
 }

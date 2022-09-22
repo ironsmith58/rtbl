@@ -124,16 +124,30 @@ func parseVariableAssignment(line string) (string, string, string, error) {
 	return name, val, op, nil
 }
 
-func Parse(path string) (*Table, error) {
+func Parse(tableName string) (*Table, error) {
 	errorFmt := "Error: %s, line %d\n"
-	content, err := tfs.ReadFile(path)
+	tableName = strings.ToLower(tableName)
+
+	//check the table registry to see if the table has
+	// already been loaded
+	loadedTable, ok := TableRegistry[tableName]
+	if !ok {
+		return nil, fmt.Errorf("No table found")
+	}
+	if loadedTable.table != nil {
+		return loadedTable.table, nil
+	}
+
+	// if not already loaded, lets load it and parse  it
+	content, err := tfs.ReadFile(loadedTable.path)
 	if err != nil {
 		return nil, err
 	}
-	name := makeName(path, "")
-	table := NewTable(name)
+
+	// Let see if we have already parse this table
+	table := NewTable(tableName)
 	table.Size = len(content)
-	table.Path = path
+	table.Path = loadedTable.path // TODO refactor path away. dont need here and in loadedTable
 	var group *Group
 	var state int
 
@@ -289,5 +303,6 @@ func Parse(path string) (*Table, error) {
 		table.AddGroup(group)
 		group = nil
 	}
+	loadedTable.table = table
 	return table, nil
 }

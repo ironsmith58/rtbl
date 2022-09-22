@@ -5,14 +5,29 @@
     "version": "0.2.0",
     
     "configurations": [
-
+        {
+            "name": "Width",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": [ "-r", "/home/ewolcott/rpgtables", "-w", "32", "new", "Religion"]
+        },
+        {
+            "name": "IF Debug",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "/home/ewolcott/go/src/rtbl",
+            "args": [ "-r", ".", "new", "Greek"]
+        },
         {
             "name": "List ~/rpgtables",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "/home/ewolcott/go/src/rtbl",
-            "args": ["list", "-r", "/home/ewolcott/rpgtables"]
+            "args": ["list", "-a", "-r", "/home/ewolcott/rpgtables"]
         },
         {
             "name": "List <nil>",
@@ -70,7 +85,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "/home/ewolcott/go/src/rtbl",
-            "args": ["new", "-r", "/home/ewolcott/go/src/rtbl/testtabs", "Factions"]
+            "args": ["new", "-r", "/home/ewolcott/go/src/rtbl", "Factions"]
         },
         {
             "name": "Roll Test",
@@ -86,7 +101,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "/home/ewolcott/go/src/rtbl",
-            "args": ["new", "-r", "/home/ewolcott/rtbl/testtabs", "name"]
+            "args": ["new", "-r", "/home/ewolcott/go/src/rtbl", "name"]
         },
         {
             "name": "Roll Cargo",
@@ -94,7 +109,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "/home/ewolcott/go/src/rtbl",
-            "args": ["new", "-r", "/home/ewolcott/tsmith/Tables", "Future/Cargo"]
+            "args": ["new", "-r", "/home/ewolcott/tsmith/", "Future/Cargo"]
         },
         {
             "name": "Roll Functions",
