@@ -7,3 +7,5 @@ Currently it can read some simple sample tables and has a few, trivial, function
 
 
 Output is converted from hrml to text by default.
+
+With thanks to the original [TableSmith](http://www.mythosa.net/p/tablesmith.html) author, Bruce Gulke for an excellent product.
