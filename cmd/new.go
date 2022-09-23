@@ -123,7 +123,15 @@ var newCmd = &cobra.Command{
 				fmt.Println(tn, ":", err)
 				return
 			}
+			// Roll on Table
 			html := parsedTable.Roll(tc.group)
+			// Handle OutputHeader and OutputFooter directive
+			if len(parsedTable.Header) > 0 {
+				html = parsedTable.Header + html
+			}
+			if len(parsedTable.Footer) > 0 {
+				html = html + parsedTable.Footer
+			}
 			xport, err := cmd.Flags().GetString("export")
 			switch xport {
 			case "html":

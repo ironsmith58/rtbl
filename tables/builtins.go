@@ -136,6 +136,33 @@ func helperInputList(t *Table, s string) (string, error) {
 	return options[choice+2], nil
 }
 
+func evaulateExpr(t *Table, s string) (interface{}, error) {
+	//convert TableSmith expression to a golang expression to evualte results
+	// 1. transform expression syntax
+	// 2. add all variables as paramters to expression
+	// 3. call  govaluate pkg to calc result
+	s = strings.Replace(s, "%", "", -1)
+	// TableSmith uses single equal (=) for equality
+	// govaluate uses double (==)
+	s = strings.Replace(s, "=", "==", -1)
+	// create an expression from the transformed input string
+	expression, err := govaluate.NewEvaluableExpression(s)
+	if err != nil {
+		return 0.0, fmt.Errorf("If~%s, %s", s, err)
+	}
+	// get any variables needd to evaluate expression
+	parameters := make(map[string]interface{}, len(t.Variables))
+	for n, v := range t.Variables {
+		ival, end := strtoi(v)
+		if end != len(v) {
+			continue // this is not a number....
+		}
+		parameters[n] = ival
+	}
+	// evaulate and return result
+	return expression.Evaluate(parameters)
+}
+
 //
 // Array of BuiltIn Functions
 //
@@ -169,6 +196,17 @@ var FunctionRegistry []Builtin = []Builtin{
 				return "an " + s[first:], nil
 			}
 			return "a " + s[first:], nil
+		},
+	},
+	{
+		Name: "Calc",
+		BFunc: func(t *Table, s string) (string, error) {
+			//{Calc~Expr}
+			// reaplce variables with values
+			// calc value
+			// convert value to string and return
+			res, err := evaulateExpr(t, s)
+			return fmt.Sprintf("%s", res), err
 		},
 	},
 	{
@@ -315,6 +353,7 @@ var FunctionRegistry []Builtin = []Builtin{
 		BFunc: func(t *Table, s string) (string, error) {
 			args := strings.Split(s, ",")
 			args[0] = strings.Replace(args[0], "%", "", -1)
+			args[0] = strings.Replace(args[0], "=", "==", -1)
 			expression, err := govaluate.NewEvaluableExpression(args[0])
 			if err != nil {
 				return "", fmt.Errorf("If~%s, %s", s, err)
@@ -374,6 +413,22 @@ var FunctionRegistry []Builtin = []Builtin{
 		BFunc: func(t *Table, s string) (string, error) {
 			l := len(s)
 			return strconv.Itoa(l), nil
+		},
+	},
+	{
+		Name: "Loop",
+		BFunc: func(t *Table, s string) (string, error) {
+			//{Loop~X,Value}
+			args := strings.SplitN(s, ",", 2)
+			max, err := strconv.Atoi(args[0])
+			if err != nil {
+				return "", err
+			}
+			var ret string
+			for j := 0; j < max; j++ {
+				ret += args[1]
+			}
+			return ret, nil
 		},
 	},
 	{
@@ -587,6 +642,15 @@ var FunctionRegistry []Builtin = []Builtin{
 		},
 	},
 	{
+		Name: "TODO Select",
+		BFunc: func(t *Table, s string) (string, error) {
+			//{Select~Expr1,Value1,Result1,Value2,Result2,...,Default}
+			//args := strings.Split(s, ",")
+
+			return "", nil
+		},
+	},
+	{
 		Name: "Space",
 		BFunc: func(t *Table, s string) (string, error) {
 			i, err := strconv.Atoi(s)
@@ -630,7 +694,7 @@ var FunctionRegistry []Builtin = []Builtin{
 	{
 		Name: "Status",
 		BFunc: func(t *Table, s string) (string, error) {
-			return s, nil
+			return s + "<br><br>", nil
 		},
 	},
 	{
@@ -646,12 +710,10 @@ var FunctionRegistry []Builtin = []Builtin{
 			if nwords <= 4 {
 				return res, nil
 			}
-			lowerwords := []string{"After", "As Of", "From", "Ago", "At", "Before",
-				"By", "During", "For", "From", "Until", "Till", "To", "In", "On", "Past", "Since",
-				"To", "Of",
-				"Above", "Across", "Against", "Behind", "Below", "Between", "Next To", "Beside",
-				"Into", "In Front Of", "Near", "Onto", "Over", "Under",
-				"About", "With", "If", "Else", "And", "Or", "The", " A ", " An "}
+			lowerwords := []string{" A ", " An ", "About", "Above", "Across", "After", "Against", "Ago", "And",
+				"As Of", "At", "Before", "Behind", "Below", "Beside", "Between", "By", "Duri    ng", "Else", "For",
+				"From", "From", "If", "In Front Of", "In", "Into", "Near    ", "Next To", "Of", "On", "Onto", "Or",
+				"Over", "Past", "Since", "The", "Til    l", "To", "To", "Under", "Until", "With"}
 			for _, w := range lowerwords {
 				res = strings.Replace(res, w, strings.ToLower(w), -1)
 			}

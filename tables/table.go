@@ -9,6 +9,8 @@ type Table struct {
 	Path      string
 	Size      int
 	Err       int
+	Header    string            // set by /OutputHeader directive
+	Footer    string            // set by /OutputFooter directive
 	Variables map[string]string // Keyword/value pairs
 	Groups    map[string]*Group
 }

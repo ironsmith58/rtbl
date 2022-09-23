@@ -2,6 +2,7 @@ package tables
 
 import (
 	"fmt"
+	"rtbl/stringsext"
 	"rtbl/tfs"
 	"strconv"
 	"strings"
@@ -151,6 +152,9 @@ func Parse(tableName string) (*Table, error) {
 	var group *Group
 	var state int
 
+	//  .-------------.
+	//  | Parse Lines |
+	//  '-------------'
 	for lineno, line := range content {
 		// Check for comment and strip it
 		idx := strings.Index(line, "#")
@@ -171,7 +175,27 @@ func Parse(tableName string) (*Table, error) {
 			continue
 		}
 		// now we parse data lines
-		if line[0] == ':' {
+		if line[0] == '/' { // this is a special directive
+			directive := stringsext.First(line[1:])
+			// this is tructures so that, in time, each case
+			// can be implemented in someway
+			switch directive {
+			case "BackColor":
+				fmt.Printf("Unknown directive, ignoring %s, line %d\n", line, lineno)
+			case "Background":
+				fmt.Printf("Unknown directive, ignoring %s, line %d\n", line, lineno)
+			case "OutputFooter":
+				table.Footer = stringsext.Rest(line)
+			case "OutputHeader":
+				table.Header = stringsext.Rest(line)
+			case "OverrideRolls":
+				fmt.Printf("Unknown directive, ignoring %s, line %d\n", line, lineno)
+			case "Stylesheet":
+				fmt.Printf("Unknown directive, ignoring %s, line %d\n", line, lineno)
+			default:
+				fmt.Printf("Unknown directive, ignoring %s, line %d\n", line, lineno)
+			}
+		} else if line[0] == ':' {
 			state = COLON_GROUP
 			// Save any previous group
 			if group != nil {
