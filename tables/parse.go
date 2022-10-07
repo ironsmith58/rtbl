@@ -1,4 +1,10 @@
+// provides Parsing routines used to load tables from files into the
+// table registry
 package tables
+
+/*
+ * parse all groups in a single table file
+ */
 
 import (
 	"fmt"
@@ -15,6 +21,9 @@ const (
 	SEMI_GROUP
 )
 
+// Aboslute Tables start with a colon (:)
+// each entry starts with absolute numeric range
+// a range may be a single digit
 func parseColonItem(line string) (int, int, string, error) {
 	/* Parse these;
 	 * 1-2,Orc
@@ -71,6 +80,9 @@ func parseColonItem(line string) (int, int, string, error) {
 	return int(min), int(max), line[irest:], nil
 }
 
+// relative tables start with a semi-colon(;)
+// each entry will have a single digit relative percentage chance
+// of occurrence
 func parseSemiItem(line string) (int, string, error) {
 	var err error
 	var min int64
@@ -125,6 +137,8 @@ func parseVariableAssignment(line string) (string, string, string, error) {
 	return name, val, op, nil
 }
 
+// read a table file and parse to create the Table struct.
+// All tables are stored in the TableRegistry
 func Parse(tableName string) (*Table, error) {
 	errorFmt := "Error: %s, line %d\n"
 	tableName = strings.ToLower(tableName)
@@ -176,7 +190,7 @@ func Parse(tableName string) (*Table, error) {
 		}
 		// now we parse data lines
 		if line[0] == '/' { // this is a special directive
-			directive := stringsext.First(line[1:])
+			directive := stringsext.First(line[1:], " ")
 			// this is tructures so that, in time, each case
 			// can be implemented in someway
 			switch directive {
@@ -185,9 +199,9 @@ func Parse(tableName string) (*Table, error) {
 			case "Background":
 				fmt.Printf("Unknown directive, ignoring %s, line %d\n", line, lineno)
 			case "OutputFooter":
-				table.Footer = stringsext.Rest(line)
+				table.Footer = stringsext.Rest(line, " ")
 			case "OutputHeader":
-				table.Header = stringsext.Rest(line)
+				table.Header = stringsext.Rest(line, " ")
 			case "OverrideRolls":
 				fmt.Printf("Unknown directive, ignoring %s, line %d\n", line, lineno)
 			case "Stylesheet":

@@ -2,31 +2,51 @@ package tables
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
 func (t *Table) Roll(gn string) string {
-	return t.OldRoll(gn)
+	//return t.OldRoll(gn)
+	return t.TryRoll(gn)
 }
 
 func (t *Table) TryRoll(gn string) string {
 
 	var gen string
 
+	// There is a table call syntax where the 'random' roll
+	// is passed in the reference as follows;
+	// [Group=%Number%]
+	// This is same as lookin up Group table at row 'Number'
+	words := strings.Split(gn, "=")
+	pick := -1
+	var err error
+	if len(words) == 2 {
+		gn = words[0]
+		pick, err = strconv.Atoi(words[1])
+		if err != nil {
+			return fmt.Sprintf("%s does not select an integer", gn)
+		}
+	}
 	g := t.Groups[gn]
 	if g == nil {
 		return gn
 	}
 
-	gen = g.Roll()
+	if pick == -1 {
+		gen = g.Roll()
+	} else {
+		gen = g.Select(pick)
+	}
 
 	gen = t.Evaluate(gen)
 
 	return gen
 }
 
-func findEndDelim(s string, begin, end string) string {
-	// find the end bracket, allow for nesting
+// Starting from the beginning of s, find the end bracket, allow for nesting
+func findEndDelim(s string, begin string, end string) (subStr string, lastIndex int) {
 	n := 0
 	lst := 0
 	ret := ""
@@ -40,15 +60,19 @@ func findEndDelim(s string, begin, end string) string {
 			if n > 0 { // keep sub references
 				ret += c
 			} else {
-				return ret
+				return ret, lst
 			}
 		} else {
 			ret += c
 		}
 	}
-	return ret
+	return ret, lst
 }
 
+/*
+2,hexagonal|TempNumber={Ceil~{Calc~(%ValueFactor%*0.09)}}||ValueFactor=%TempNumber%|
+1,crescent-shaped|TempNumber={Ceil~{Calc~(%ValueFactor%*0.05)}}||ValueFactor=%TempNumber%|
+*/
 func (t *Table) Evaluate(orig string) string {
 
 	gen := ""
@@ -56,31 +80,33 @@ func (t *Table) Evaluate(orig string) string {
 	for j := 0; j < len(orig); j++ {
 		switch orig[j] {
 		case '[':
-			sub := findEndDelim(orig[j+1:], "[", "]")
-			sub += t.Evaluate(sub)
+			sub, last := findEndDelim(orig[j+1:], "[", "]")
+			j += last
+			sub = t.Evaluate(sub)
 			gen += t.Roll(sub)
 		case '{':
-			sub := findEndDelim(orig[j+1:], "{", "}")
-			sub += t.Evaluate(sub)
+			sub, last := findEndDelim(orig[j+1:], "{", "}")
+			j += last
+			sub = t.Evaluate(sub)
 			words := strings.Split(sub, "~")
 			res, err := BuiltinCall(t, words[0], words[1])
 			if err != nil {
-				fmt.Printf("Error: %s(%s): %s\n", words[0], words[1], err)
-				res = "-ERROR-"
+				return "\n--ERROR Calling Builtin-- " + fmt.Sprintf("%s(%s): %s\n", words[0], words[1], err)
 			}
 			gen += res
 		case '%':
 			j += 1
 			idx := strings.Index(orig[j:], "%")
-			v, ok := t.GetVariable(orig[j : j+idx])
+			varName := orig[j : j+idx]
+			v, ok := t.GetVariable(varName)
 			if ok {
-				gen += v
+				gen += t.Evaluate(v)
 			} else {
-				gen += "ERROR -- %" + orig[j:idx] + "% does not exist"
+				return "\n--ERROR Accessing Variable-- %" + orig[j:idx] + "% does not exist"
 			}
 			j += idx
 		default:
-			gen += orig[j:j]
+			gen += orig[j : j+1]
 		}
 	}
 	return gen

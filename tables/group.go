@@ -1,5 +1,12 @@
 package tables
 
+/* Groups are named sub-tables within a Table file
+ * e.g. ;Name
+ *      1,Fred
+ *      1,Paul
+ *      ....
+ */
+
 import (
 	"fmt"
 	"strconv"
@@ -20,7 +27,7 @@ type Group struct {
 	Suffix   string              // string placed after all random entries when returned
 	maxRoll  int                 // all rolls are essentially 1D{maxRoll}
 	table    roll.Table          // table of entries and their percentage chance of appearing
-	seen     map[string]struct{} // for useOnce groups, this holds previosly seen values
+	seen     map[string]struct{} // for useOnce groups, this holds previously seen values
 }
 
 const ABS_GROUP = ':' // flag for Absolute Percentage Chance group
@@ -90,6 +97,7 @@ func (g *Group) Len() int { return len(g.table.Items) }
 func (g *Group) Min() int { return 1 }
 func (g *Group) Max() int { return g.maxRoll }
 
+// add a single item to this group with its matching percentage
 func (g *Group) AddItem(start, end int, l string) {
 
 	if g.probType == REL_GROUP {
@@ -121,6 +129,8 @@ func (g *Group) AddItem(start, end int, l string) {
 }
 
 // append string argument to the last Item
+// used during parsing
+// used to support underscore(_) continuation
 func (g *Group) AppendLastItem(l string) error {
 	if len(g.table.Items) == 0 {
 		return fmt.Errorf("Can not append, no items in Group %s", g.Name)
@@ -132,7 +142,7 @@ func (g *Group) AppendLastItem(l string) error {
 	return nil
 }
 
-// defiend as an empty struct so ita take sno space in the map
+// defined as an empty struct so it takes no space in the map
 // which is how we implement sets in golang
 var dummy struct{}
 
@@ -149,7 +159,7 @@ func (g *Group) Roll() string {
 			return ""
 		}
 	}
-	//repeatedly select a value intil done
+	//repeatedly select a value until done
 	for {
 		s = g.table.Roll()
 		_, alreadyUsed := g.seen[s]
@@ -161,6 +171,20 @@ func (g *Group) Roll() string {
 	// so we can check to see if we used it next time
 	if g.useOnce {
 		g.seen[s] = dummy
+	}
+	return g.Prefix + s + g.Suffix
+}
+
+// select the Nth item from the table
+func (g *Group) Select(n int) string {
+	var s string
+
+	//repeatedly select a value until done
+	for j := range g.table.Items {
+		if g.table.Items[j].Match.Contains(n) {
+			s = g.table.Items[j].Text
+			break
+		}
 	}
 	return g.Prefix + s + g.Suffix
 }
