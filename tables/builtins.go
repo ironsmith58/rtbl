@@ -72,9 +72,15 @@ func isNumber(s string) bool {
 
 // is this an English language vowel?
 func isVowel(c byte) bool {
-	if strings.Contains("aeiouAEIOU", string(c)) {
+	switch c {
+	case 'a', 'e', 'i', 'o', 'u':
+		return true
+	case 'A', 'E', 'I', 'O', 'U':
 		return true
 	}
+	//if strings.Contains("aeiouAEIOU", string(c)) {
+	//	return true
+	//}
 	return false
 }
 
@@ -155,9 +161,7 @@ func evaulateExpr(t *Table, s string) (interface{}, error) {
 	return expression.Evaluate(parameters)
 }
 
-//
 // Array of BuiltIn Functions
-//
 func FunctionRegistry() []Builtin {
 	return []Builtin{
 		{

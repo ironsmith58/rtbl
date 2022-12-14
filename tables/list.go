@@ -130,7 +130,7 @@ func PrintPaths(tables TablesByCategory, showAll bool) {
 	}
 }
 
-// Most import Variable -- holds all table referecnes where
+// Most import Variable -- holds all table references where
 // Parse/Lookup can find tables ....
 var TableRegistry TablePathsByName
 

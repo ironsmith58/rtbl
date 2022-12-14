@@ -19,6 +19,12 @@ func (t *Table) TryRoll(gn string) string {
 	// is passed in the reference as follows;
 	// [Group=%Number%]
 	// This is same as lookin up Group table at row 'Number'
+	if gn[0] == '[' {
+		gn = gn[1:]
+	}
+	if gn[len(gn)-1] == ']' {
+		gn = gn[:len(gn)-1]
+	}
 	words := strings.Split(gn, "=")
 	pick := -1
 	var err error
@@ -73,19 +79,19 @@ func findEndDelim(s string, begin string, end string) (subStr string, lastIndex 
 2,hexagonal|TempNumber={Ceil~{Calc~(%ValueFactor%*0.09)}}||ValueFactor=%TempNumber%|
 1,crescent-shaped|TempNumber={Ceil~{Calc~(%ValueFactor%*0.05)}}||ValueFactor=%TempNumber%|
 */
-func (t *Table) Evaluate(orig string) string {
+func (t *Table) Evaluate(s string) string {
 
 	gen := ""
 
-	for j := 0; j < len(orig); j++ {
-		switch orig[j] {
+	for j := 0; j < len(s); j++ {
+		switch s[j] {
 		case '[':
-			sub, last := findEndDelim(orig[j+1:], "[", "]")
+			sub, last := findEndDelim(s[j+1:], "[", "]")
 			j += last
 			sub = t.Evaluate(sub)
 			gen += t.Roll(sub)
 		case '{':
-			sub, last := findEndDelim(orig[j+1:], "{", "}")
+			sub, last := findEndDelim(s[j+1:], "{", "}")
 			j += last
 			sub = t.Evaluate(sub)
 			words := strings.Split(sub, "~")
@@ -96,20 +102,28 @@ func (t *Table) Evaluate(orig string) string {
 			gen += res
 		case '%':
 			j += 1
-			idx := strings.Index(orig[j:], "%")
-			varName := orig[j : j+idx]
+			idx := strings.Index(s[j:], "%")
+			varName := s[j : j+idx]
 			v, ok := t.GetVariable(varName)
 			if ok {
 				gen += t.Evaluate(v)
 			} else {
-				return "\n--ERROR Accessing Variable-- %" + orig[j:idx] + "% does not exist"
+				return "\n--ERROR Accessing Variable-- %" + s[j:idx] + "% does not exist"
 			}
 			j += idx
 		default:
-			gen += orig[j : j+1]
+			gen += s[j : j+1]
 		}
 	}
 	return gen
+}
+
+func evalBuiltin(s string) string {
+	// [group] in this table
+	// [table.group] reference to another table
+	// [group=<int>]
+	// [group=<expr>]
+	return ""
 }
 
 func (t *Table) OldRoll(gn string) string {

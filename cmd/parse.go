@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -26,7 +25,7 @@ var parseCmd = &cobra.Command{
 			fmt.Println(err)
 			return
 		}
-		env_root := os.Getenv("RTBL_TABLE_ROOT")
+		env_root := os.Getenv("RTBL_ROOT")
 		root, err := cmd.Flags().GetString("root")
 		if err != nil {
 			fmt.Println(err)

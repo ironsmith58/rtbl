@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Eric F. Wolcott <efwolcott@gmail.com>
-
 */
 package cmd
 
@@ -87,7 +86,7 @@ var newCmd = &cobra.Command{
 	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		env_root := os.Getenv("RTBL_TABLE_ROOT")
+		env_root := os.Getenv("RTBL_ROOT")
 		root, err := cmd.Flags().GetString("root")
 		if err != nil {
 			fmt.Println(err)
